@@ -22,8 +22,8 @@ Variables:
 Source: https://data.census.gov/cedsci/table?q=broadband&g=0400000US06%241400000&y=2020&tid=ACSDT5Y2020.B28003
 
 
-Broadband Access
+ACS Health Insurance Coverage
 
 Variables:
 
-Source: https://data.census.gov/cedsci/table?q=broadband&g=0400000US06%241400000&y=2020&tid=ACSDT5Y2020.B28003
+Source: https://data.census.gov/cedsci/table?q=insurance&g=0400000US06%241400000&y=2020&tid=ACSST5Y2020.S2701
