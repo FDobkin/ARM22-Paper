@@ -177,3 +177,198 @@ drop totpop inspop total_population insured_population
 merge m:1 tract_id using `hpsaacsfinint'
 keep if _merge == 3
 drop _merge
+
+*Save
+tempfile file
+save `file'
+
+*Clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep cholestorol screening
+keep if measure == "Cholesterol screening among adults aged >=18 years"
+
+*Rename
+rename data_value chol_screen
+
+*Save
+tempfile chol
+save `chol'
+
+*Clear
+clear 
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep Sleeping less than 7 hours among adults aged >=18 years
+keep if measure == "Sleeping less than 7 hours among adults aged >=18 years"
+
+*Rename
+rename data_value sleep
+
+*Merge
+merge 1:1 locationname using `chol'
+keep if _merge == 3
+drop _merge 
+
+*Save
+tempfile cholsleep
+save `cholsleep'
+
+*Clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep No leisure-time physical activity among adults aged >=18 years
+keep if measure == "No leisure-time physical activity among adults aged >=18 years"
+
+*Rename measure
+rename data_value phy_act
+
+*merge 
+merge 1:1 locationname using `cholsleep'
+drop _merge
+
+*Save
+tempfile cholsleepph
+save `cholsleepph'
+
+*Clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep Binge drinking among adults aged >=18 years
+keep if measure == "Binge drinking among adults aged >=18 years"
+
+*Rename
+rename data_value binge_drink
+
+*merge
+merge 1:1 locationname using `cholsleepph'
+drop _merge
+
+*Save
+tempfile cholsleepphdrink
+save `cholsleepphdrink'
+
+*clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep Fair or poor self-rated health status among adults aged >=18 years
+keep if measure == "Fair or poor self-rated health status among adults aged >=18 years"
+
+*Rename 
+rename data_value self_health
+
+*Merge
+merge 1:1 locationname using `cholsleepphdrink'
+drop _merge
+
+*Save
+tempfile cholsleepphdrinkhlth
+save `cholsleepphdrinkhlth'
+
+*Clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep
+keep if measure == "Current smoking among adults aged >=18 years"
+
+*Rename
+rename data_value smoke
+
+*merge
+merge 1:1 locationname using `cholsleepphdrinkhlth'
+drop _merge
+
+*Save
+tempfile smoke
+save `smoke'
+
+*Clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep COPD
+keep if measure == "Chronic obstructive pulmonary disease among adults aged >=18 years"
+
+*Rename data_value
+rename data_value copd
+
+*Merge
+merge 1:1 locationname using `smoke'
+drop _merge
+
+*Clear
+clear
+
+*Import Place data
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep cancer
+keep if measure == "Cancer (excluding skin cancer) among adults aged >=18 years"
+
+*rename data_value
+rename data_value cancer
+
+*merge
+merge 1:1 locationname using `smoke'
+drop _merge 
+
+*Save
+tempfile cancer
+save `cancer'
+
+*clear
+clear
+
+*Import 
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep 
+keep if measure == "Diagnosed diabetes among adults aged >=18 years"
+
+*Rename
+rename data_value diabetes
+
+*merge
+merge 1:1 locationname using `cancer'
+drop _merge
+
+*Save
+tempfile diabetes
+save `diabetes'
+
+*Clear
+clear
+
+*Import 
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/places.csv"
+
+*Keep
+keep if measure == "Coronary heart disease among adults aged >=18 years"
+
+*Rename
+rename data_value heart_disease
+
+*Merge
+merge 1:1 locationname using `diabetes'
+drop _merge
+tostring locationname, gen(tract_id)
+merge 1:m tract_id using `file'
