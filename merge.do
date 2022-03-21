@@ -1,4 +1,3 @@
-
 *Clear
 clear
 
@@ -139,4 +138,42 @@ keep tract_id broadband_perc
 
 *Merge
 merge m:1 tract_id using `hpsacesfin'
+drop _merge
+
+*Save
+tempfile hpsaacsfinint
+save `hpsaacsfinint'
+
+*Clear
+clear
+
+*Import insurance file
+import delimited "https://raw.githubusercontent.com/FDobkin/ARM22-Paper/main/acs_insurance.csv"
+
+*Keep three variables
+keep v1 v3 v4
+
+*Rename variables
+rename v1 GEOID
+rename v3 total_population
+rename v4 insured_population
+
+*Drop first two rows
+gen row_n = _n
+drop if row_n == 1 | row_n == 2
+drop row_n
+
+*Create tract_id
+gen tract_id = substr(GEOID, 11, 20)
+drop GEOID
+
+*Create numeric values
+gen totpop = real(total_population)
+gen inspop = real(insured_population)
+gen insur_rate = (inspop/totpop)*100
+drop totpop inspop total_population insured_population
+
+*merge
+merge m:1 tract_id using `hpsaacsfinint'
+keep if _merge == 3
 drop _merge
