@@ -1,0 +1,146 @@
+*Author: Finn Dobkin
+*Description: Create regression results for ARM paper
+*ssc install outreg2
+clear all
+
+*Import data
+use "/Users/finndobkin/Downloads/final_file (5).dta"
+
+*Unconditional models
+*Cancer
+reg cancer hpsatract hpsacounty, r
+estimates store m1, title(Cancer)
+reg cancer hpsatract hpsacounty [weight=totalpop], r 
+estimates store m2, title(Cancer, Weighted)
+*Diabetes
+reg diabetes hpsatract hpsacounty, r
+estimates store m3, title(Diabetes)
+reg diabetes hpsatract hpsacounty  [weight=totalpop], r
+estimates store m4, title(Diabetes, Weighted)
+*Cardiovascular Disease
+reg cardiovasculardiseasen hpsatract hpsacounty, r
+estimates store m5, title(Cardiovascular Disease)
+reg cardiovasculardiseasen hpsatract hpsacounty  [weight=totalpop], r
+estimates store m6, title(Cardiovascular Disease, Weighted)
+*Self-reported health
+reg self_health hpsatract hpsacounty, r
+estimates store m7, title(Poor or Fair Self-Reported health)
+reg self_health hpsatract hpsacounty  [weight=totalpop], r
+estimates store m8, title(Poor or Fair Self-Reported health, Weighted)
+
+*Output results
+esttab m1 m2 m3 m4 m5 m6 m7 m8, cells(b(star fmt(3))) legend label varlabels(_cons Constant) stats(r2 df_r bic)
+
+
+*Health behavior models
+*Create local
+global hb_covariates "binge_drink smoke sleep insur_rate"
+
+*Cancer
+reg cancer hpsatract hpsacounty $hb_covariates, r
+estimates store a1, title(Cancer)
+reg cancer hpsatract hpsacounty $hb_covariates [weight=totalpop], r 
+estimates store a2, title(Cancer, Weighted)
+*Diabetes
+reg diabetes hpsatract hpsacounty $hb_covariates, r
+estimates store a3, title(Diabetes)
+reg diabetes hpsatract hpsacounty $hb_covariates [weight=totalpop], r
+estimates store a4, title(Diabetes, Weighted)
+*Cardiovascular Disease
+reg cardiovasculardiseasen hpsatract hpsacounty $hb_covariates, r
+estimates store a5, title(Cardiovascular Disease)
+reg cardiovasculardiseasen hpsatract hpsacounty $hb_covariates [weight=totalpop], r
+estimates store a6, title(Cardiovascular Disease, Weighted)
+*Self-reported health
+reg self_health hpsatract hpsacounty $hb_covariates, r
+estimates store a7, title(Poor or Fair Self-Reported health)
+reg self_health hpsatract hpsacounty $hb_covariates [weight=totalpop], r
+estimates store a8, title(Poor or Fair Self-Reported health, Weighted)
+
+*Output results
+esttab a1 a2 a3 a4 a5 a6 a7 a8, cells(b(star fmt(3))) legend label varlabels(_cons Constant) stats(r2 df_r bic)
+
+
+*Demographic models
+global dem_covariates "white_n unemploymentn housingburdenn linguisticisolationn broadband_perc"
+
+*Cancer
+reg cancer hpsatract hpsacounty $dem_covariates, r
+estimates store d1, title(Cancer)
+reg cancer hpsatract hpsacounty $dem_covariates [weight=totalpop], r 
+estimates store d2, title(Cancer, Weighted)
+*Diabetes
+reg diabetes hpsatract hpsacounty $dem_covariates, r
+estimates store d3, title(Diabetes)
+reg diabetes hpsatract hpsacounty $dem_covariates [weight=totalpop], r
+estimates store d4, title(Diabetes, Weighted)
+*Cardiovascular Disease
+reg cardiovasculardiseasen hpsatract hpsacounty $dem_covariates, r
+estimates store d5, title(Cardiovascular Disease)
+reg cardiovasculardiseasen hpsatract hpsacounty $dem_covariates [weight=totalpop], r
+estimates store d6, title(Cardiovascular Disease, Weighted)
+*Self-reported health
+reg self_health hpsatract hpsacounty $dem_covariates, r
+estimates store d7, title(Poor or Fair Self-Reported health)
+reg self_health hpsatract hpsacounty $dem_covariates [weight=totalpop], r
+estimates store d8, title(Poor or Fair Self-Reported health, Weighted)
+
+*Output results
+esttab d1 d2 d3 d4 d5 d6 d7 d8, cells(b(star fmt(3))) legend label varlabels(_cons Constant) stats(r2 df_r bic)
+
+
+*Environmental exposure models
+*Environmental covariates
+global env_covariates "pm25 dieselpm pesticides hazwaste solidwaste leadn"
+
+*Cancer
+reg cancer hpsatract hpsacounty $env_covariates, r
+estimates store e1, title(Cancer)
+reg cancer hpsatract hpsacounty $env_covariates [weight=totalpop], r 
+estimates store e2, title(Cancer, Weighted)
+*Diabetes
+reg diabetes hpsatract hpsacounty $env_covariates, r
+estimates store e3, title(Diabetes)
+reg diabetes hpsatract hpsacounty $env_covariates [weight=totalpop], r
+estimates store e4, title(Diabetes, Weighted)
+*Cardiovascular Disease
+reg cardiovasculardiseasen hpsatract hpsacounty $env_covariates, r
+estimates store e5, title(Cardiovascular Disease)
+reg cardiovasculardiseasen hpsatract hpsacounty $env_covariates [weight=totalpop], r
+estimates store e6, title(Cardiovascular Disease, Weighted)
+*Self-reported health
+reg self_health hpsatract hpsacounty $env_covariates, r
+estimates store e7, title(Poor or Fair Self-Reported health)
+reg self_health hpsatract hpsacounty $env_covariates [weight=totalpop], r
+estimates store e8, title(Poor or Fair Self-Reported health, Weighted)
+
+*Output results
+esttab e1 e2 e3 e4 e5 e6 e7 e8, cells(b(star fmt(3))) legend label varlabels(_cons Constant) stats(r2 df_r bic)
+
+
+*Total covariates
+global tot_covariates "binge_drink smoke sleep insur_rate white_n unemploymentn housingburdenn linguisticisolationn broadband_perc pm25 dieselpm pesticides hazwaste solidwaste leadn"
+
+*Cancer
+reg cancer hpsatract hpsacounty $tot_covariates, r
+estimates store t1, title(Cancer)
+reg cancer hpsatract hpsacounty $tot_covariates [weight=totalpop], r 
+estimates store t2, title(Cancer, Weighted)
+*Diabetes
+reg diabetes hpsatract hpsacounty $tot_covariates, r
+estimates store t3, title(Diabetes)
+reg diabetes hpsatract hpsacounty $tot_covariates [weight=totalpop], r
+estimates store t4, title(Diabetes, Weighted)
+*Cardiovascular Disease
+reg cardiovasculardiseasen hpsatract hpsacounty $tot_covariates, r
+estimates store t5, title(Cardiovascular Disease)
+reg cardiovasculardiseasen hpsatract hpsacounty $tot_covariates [weight=totalpop], r
+estimates store t6, title(Cardiovascular Disease, Weighted)
+*Self-reported health
+reg self_health hpsatract hpsacounty $tot_covariates, r
+estimates store t7, title(Poor or Fair Self-Reported health)
+reg self_health hpsatract hpsacounty $tot_covariates [weight=totalpop], r
+estimates store t8, title(Poor or Fair Self-Reported health, Weighted)
+
+*Output results
+esttab t1 t2 t3 t4 t5 t6 t7 t8, cells(b(star fmt(3))) legend label varlabels(_cons Constant) stats(r2 df_r bic)
