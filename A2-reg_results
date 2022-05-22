@@ -6,6 +6,9 @@ clear all
 *Import data
 use "/Users/finndobkin/Downloads/final_file (5).dta"
 
+*Create interaction term 
+gen unemp_house = unemploymentn * housingburdenn
+
 *Unconditional models
 *Cancer
 reg cancer hpsatract hpsacounty, r
@@ -62,7 +65,7 @@ esttab a1 a2 a3 a4 a5 a6 a7 a8, cells(b(star fmt(3))) legend label varlabels(_co
 
 
 *Demographic models
-global dem_covariates "white_n unemploymentn housingburdenn linguisticisolationn broadband_perc"
+global dem_covariates "white_n unemploymentn housingburdenn linguisticisolationn broadband_perc unemp_house"
 
 *Cancer
 reg cancer hpsatract hpsacounty $dem_covariates, r
@@ -119,7 +122,7 @@ esttab e1 e2 e3 e4 e5 e6 e7 e8, cells(b(star fmt(3))) legend label varlabels(_co
 
 
 *Total covariates
-global tot_covariates "binge_drink smoke sleep insur_rate white_n unemploymentn housingburdenn linguisticisolationn broadband_perc pm25 dieselpm pesticides hazwaste solidwaste leadn"
+global tot_covariates "binge_drink smoke sleep insur_rate white_n unemploymentn housingburdenn unemp_house linguisticisolationn broadband_perc pm25 dieselpm pesticides hazwaste solidwaste leadn"
 
 *Cancer
 reg cancer hpsatract hpsacounty $tot_covariates, r
